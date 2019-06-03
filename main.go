@@ -10,6 +10,8 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/hajimehoshi/ebiten/examples/resources/images"
+
+	"gooeyblob/Layouts"
 )
 
 const (
@@ -49,48 +51,13 @@ func init() {
 		log.Fatal(err)
 	}
 	tilesImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
-}
 
-var (
-	layers = [][]int{
-		{
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 218, 243, 243, 243, 243, 243, 243, 243, 243, 243, 218, 243, 244, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 244, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 219, 243, 243, 243, 219, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-			243, 218, 243, 243, 243, 243, 243, 243, 243, 243, 243, 244, 243, 243, 243,
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
-		},
-		{
-			  0,   0,   0,   0,   0, 303,   0,   0,   0,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,  26,  27,  28,  29,  30,  31,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,  51,  52,  53,  54,  55,  56,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,  76,  77,  78,  79,  80,  81,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0, 101, 102, 103, 104, 105, 106,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0, 126, 127, 128, 129, 128, 131,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0, 303, 303, 245, 242, 303, 303,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-			  0,   0,   0,   0,   0,   0,   0, 245, 242,   0,   0,   0,   0,   0,   0,
-		},
+	img, _, err = image.Decode(bytes.NewReader(images.Runner_png))
+	if err != nil {
+		log.Fatal(err)
 	}
-)
+	runnerImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
+}
 
 func update(screen *ebiten.Image) error {
 	count++
@@ -100,7 +67,7 @@ func update(screen *ebiten.Image) error {
 	}
 
 	const xNum = screenWidth / tileSize
-	for _, l := range layers {
+	for _, l := range Layouts.Layers {
 		for i, t := range l {
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(float64((i%xNum)*tileSize), float64((i/xNum)*tileSize))
@@ -124,11 +91,6 @@ func update(screen *ebiten.Image) error {
 }
 
 func main() {
-	img, _, err := image.Decode(bytes.NewReader(images.Runner_png))
-	if err != nil {
-		log.Fatal(err)
-	}
-	runnerImage, _ = ebiten.NewImageFromImage(img, ebiten.FilterDefault)
 	if err := ebiten.Run(update, screenWidth, screenHeight, 2, "GooeyBlob"); err != nil {
 		log.Fatal(err)
 	}
